@@ -1,5 +1,5 @@
-# PROPOSAL MACHINE LEARNING - DATA SCIENCE
 
+<<<<<<< HEAD
 ## INFORMASI PROYEK
 
 | Komponen | Keterangan |
@@ -126,3 +126,5 @@ Latubessy, A., Wardoyo, R., Musdholifah, A., & Kusrohmaniah, S. (2024). Fine tun
 Latubessy, A., Wardoyo, R., Musdholifah, A., & Kusrohmaniah, S. (2025). Fine-tuned attribute weighted naïve Bayes with modified partial instances reduction for gaming disorder classification. *HighTech and Innovation Journal*, 6(1), 1-14. https://doi.org/10.28991/HIJ-2025-06-01-05
 
 Spitzer, R. L., Kroenke, K., Williams, J. B. W., & Löwe, B. (2006). A brief measure for assessing generalized anxiety disorder: The GAD-7. *Archives of Internal Medicine*, 166(10), 1092–1097. https://doi.org/10.1001/archinte.166.10.1092
+=======
+>>>>>>> 03216196b6353e97ab89dc542a4382087eec20da
