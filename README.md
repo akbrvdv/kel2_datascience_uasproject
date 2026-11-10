@@ -4,16 +4,16 @@
 
 | Komponen | Keterangan |
 | :--- | :--- |
-| **Judul Proyek** | Perbandingan Kinerja Linear Regression, XGBoost, dan Long Short-Term Memory (LSTM) dalam Prediksi Jumlah Kasus Demam Berdarah Dengue (DBD) Berdasarkan Faktor Meteorologi di Jakarta Pusat |
-| **Kelompok / Kelas** | Kelompok 8 / TRPL 5B |
-| **Nama Mahasiswa** | 1. Habib Hajid Taqiuddin (NIM: 244311043)<br>2. Achmad Alvin Al Falah (NIM: 244311031) |
-| **Program Studi** | Teknologi Rekayasa Perangkat Lunak (TRPL) |
+| **Judul Proyek** | Deteksi Dini Risiko Kecemasan Sedang–Berat pada Gamer Online Berdasarkan Pola Bermain dan Faktor Psikologis Menggunakan Machine Learning |
+| **Kelompok / Kelas** | Kelompok 2 / TRPL 5B |
+| **Nama Mahasiswa** | 1. Mohammad Hanif Huda A (NIM: 244311049)<br>2. Muhammad Akbar Fadilah (NIM: 244311051)<br> |
+| **Program Studi** | Rekayasa Perangkat Lunak (TRPL) |
 | **Mata Kuliah** | Data Science |
 | **Dosen Pengampu** | Gus Nanang Syaifuddiin, S.Kom., M.Kom. |
 | **Tahun Akademik** | 2026/2027, Semester Gasal (Semester 5) |
-| **Link Repository GitHub** | https://github.com/AchmadAlvin/dataScience_kelompok_8 |
+| **Link Repository GitHub** | https://github.com/akbrvdv/kel2_datascience_uasproject |
 | **SDG yang Dipilih** | SDG 3: Kehidupan Sehat dan Sejahtera (Good Health and Well-being) |
-| **Target SDG Relevan** | Target 3.3: Mengakhiri epidemi AIDS, tuberkulosis, malaria, dan penyakit tropis terabaikan serta memerangi hepatitis, penyakit yang ditularkan melalui air, dan penyakit menular lainnya. |
+| **Target SDG Relevan** | Target 3.4: Mengurangi sepertiga dari kematian dini akibat penyakit tidak menular melalui pencegahan dan pengobatan, serta meningkatkan kesehatan mental dan kesejahteraan. |
 
 ---
 
@@ -21,46 +21,46 @@
 
 ### 1.1 Latar Belakang
 
-Demam Berdarah Dengue (DBD) merupakan salah satu penyakit menular yang masih menjadi masalah kesehatan masyarakat di Indonesia. Penyakit ini disebabkan oleh virus dengue yang ditularkan melalui gigitan nyamuk Aedes aegypti. Perkembangbiakan nyamuk dan penularan virus sangat dipengaruhi oleh kondisi lingkungan serta cuaca harian. Curah hujan yang tinggi menyebabkan timbulnya genangan air sebagai tempat perindukan jentik, sementara suhu udara dan kelembapan memengaruhi laju metabolisme nyamuk serta masa inkubasi virus di dalam tubuh vektor. Oleh karena itu, data cuaca harian dapat dimanfaatkan untuk menganalisis pola dan memprediksi fluktuasi jumlah kasus DBD.
+Permainan daring (*online gaming*) telah menjadi salah satu aktivitas hiburan harian paling populer bagi jutaan orang di seluruh dunia. Kendati menawarkan sarana relaksasi dan interaksi sosial virtual, intensitas bermain yang berlebihan berpotensi memicu konsekuensi psikologis yang merugikan. Pada tahun 2018, *World Health Organization* (WHO) secara resmi mengklasifikasikan *gaming disorder* sebagai salah satu bentuk gangguan psikiatri dalam *International Classification of Diseases* edisi ke-11 (ICD-11). Berbagai studi empiris menunjukkan bahwa tingginya prevalensi gangguan kecemasan umum memiliki korelasi erat dengan pola *Internet Gaming Disorder* (IGD) (Latubessy et al., 2024).
 
-Penelitian sebelumnya oleh Syahbani dan Sukendra (2020) mengenai peramalan kasus DBD di Kota Magelang menunjukkan bahwa curah hujan memiliki hubungan yang signifikan dengan angka kejadian DBD (p-value = 0,001). Namun, penelitian tersebut hanya menggunakan variabel tunggal curah hujan, sehingga belum mencakup pengaruh faktor cuaca lain seperti suhu dan kelembapan secara bersamaan.
+Dalam asesmen psikologis standar, tingkat kecemasan umum umumnya diukur menggunakan instrumen baku kuesioner *Generalized Anxiety Disorder-7* (GAD-7) dengan rentang skor $0-21$ (Spitzer et al., 2006). Individu dengan skor GAD-7 $\ge 10$ dikategorikan mengalami risiko kecemasan tingkat sedang hingga berat yang memerlukan evaluasi klinis lebih lanjut. Akan tetapi, proses pengisian kuesioner mandiri yang panjang membutuhkan kesediaan, waktu, dan partisipasi aktif dari responden. Oleh karena itu, pengembangan sistem deteksi dini (*early screening tool*) berbasis model machine learning yang memanfaatkan indikator pola bermain dan faktor psikologis ringkas dapat menjadi instrumen penapisan awal yang sangat berguna.
 
-Kajian lain oleh Tarmana (2014) di DKI Jakarta menunjukkan bahwa kenaikan suhu dan perubahan pola hujan berpotensi meningkatkan risiko kejadian DBD. Selain itu, Ichwani dan Wibawa (2019) memodelkan angka kasus DBD di Kecamatan Tembalang menggunakan metode Extreme Learning Machine (ELM) dengan input suhu, kelembapan, dan curah hujan. Hasil kedua studi tersebut mengindikasikan bahwa penggunaan beberapa variabel cuaca sekaligus memberikan informasi prediktif yang lebih baik dibandingkan variabel tunggal.
+Penelitian terdahulu yang mengkaji data gamer sebagian besar berfokus pada komparasi performa algoritma. Misalnya, penelitian Karthik dan Ashokkumar (2023) membandingkan Recurrent Neural Network (RNN) dengan Decision Tree J48 pada dataset Kaggle (20.200 sampel) untuk menganalisis keterkaitan game online terhadap gangguan mental remaja, di mana RNN menunjukkan efektivitas yang lebih unggul. Selain itu, Latubessy et al. (2024) mengklasifikasikan kecemasan pemain game menjadi empat kategori tingkat keparahan menggunakan metode *Fine-Tuned Attribute Weighted Naïve Bayes* (FTAWNB) dengan klaim akurasi mencapai 99,22%. Namun, capaian akurasi setinggi itu perlu dievaluasi secara kritis terhadap risiko kebocoran label (*label leakage*) apabila item kuesioner GAD dimasukkan ke dalam fitur prediksi. Studi lanjutan oleh Latubessy et al. (2025) juga menemukan bahwa algoritma Naïve Bayes sangat rentan terhadap *outlier*, sehingga prosedur pra-pemrosesan data yang tepat mutlak diperlukan.
 
-Meskipun demikian, terdapat beberapa hal yang perlu dikembangkan lebih lanjut. Pertama, sebagian besar studi terdahulu berfokus pada satu metode saja tanpa membandingkan beberapa model secara langsung pada data yang sama. Kedua, belum banyak kajian yang membandingkan performa model statistik dasar (Linear Regression), algoritma ensemble pohon (XGBoost), dan jaringan saraf tiruan untuk deret waktu (LSTM) pada wilayah perkotaan padat seperti Jakarta Pusat. Ketiga, pengaruh cuaca terhadap jumlah kasus DBD memiliki jeda waktu (time lag) antara 1 hingga 4 minggu akibat siklus metamorfosis nyamuk dan masa inkubasi virus. Oleh karena itu, rekayasa fitur jeda waktu perlu diterapkan untuk menguji pengaruhnya terhadap akurasi model.
+Meskipun demikian, terdapat beberapa celah penting yang perlu diinvestigasi lebih lanjut. Pertama, belum ada kejelasan mengenai sejauh mana variabel pola bermain saja mampu memprediksi kecemasan dibandingkan jika diintegrasikan dengan faktor psikologis. Eksplorasi awal pada 13.050 responden menunjukkan bahwa korelasi jam bermain terhadap skor GAD-7 relatif rendah ($r \approx 0,10$). Model yang hanya menggunakan fitur pola bermain menghasilkan nilai ROC-AUC sekitar $0,58-0,60$, sedangkan penggabungan faktor psikologis seperti kepuasan hidup (*Satisfaction with Life* / SWL), kecemasan sosial (*Social Phobia Inventory* / SPIN), dan narsisisme mampu meningkatkan ROC-AUC hingga mencapai $\approx 0,79$. Kedua, penelitian komparatif yang menguji secara langsung model statistik parametrik dasar (Logistic Regression), model ensemble pohon (XGBoost / Random Forest), dan jaringan saraf tiruan (Multi-Layer Perceptron / MLP) pada dataset tabular gamer yang mengalami ketimpangan kelas (*imbalanced data*) masih sangat terbatas.
 
-Berdasarkan permasalahan tersebut, penelitian ini bertujuan untuk membandingkan kinerja tiga model, yaitu Linear Regression, XGBoost, dan Long Short-Term Memory (LSTM), dalam memprediksi jumlah kasus DBD harian di Jakarta Pusat menggunakan data BMKG periode 2021 sampai 2024. Linear Regression digunakan sebagai model dasar (baseline), XGBoost diterapkan untuk menangkap interaksi non-linear antarfaktor cuaca, dan LSTM digunakan untuk memodelkan pola ketergantungan waktu jangka panjang.
-
-Evaluasi performa dilakukan menggunakan metrik Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), dan koefisien determinasi (R²). Pembagian data latih dan data uji dilakukan secara kronologis untuk mencegah kebocoran data (data leakage). Hasil prediksi ini diharapkan dapat menjadi rujukan sistem kewaspadaan dini bagi dinas kesehatan, serta mendukung pencapaian SDG 3 Target 3.3 dalam menanggulangi penyakit menular.
+Berdasarkan permasalahan tersebut, penelitian ini bertujuan untuk membandingkan kinerja tiga model, yaitu Logistic Regression sebagai *baseline*, XGBoost / Random Forest sebagai representasi *advanced machine learning*, serta Multi-Layer Perceptron (MLP) sebagai arsitektur *deep learning* dalam memprediksi risiko kecemasan sedang–berat pada gamer online. Seluruh butir pertanyaan GAD dikeluarkan dari variabel fitur untuk mencegah *label leakage*. Evaluasi model dilakukan dengan menangani ketidakseimbangan kelas ($\approx 17,5\%$ kelas risiko tinggi) melalui metrik Macro-F1, Recall, ROC-AUC, dan PR-AUC. Hasil penelitian ini diharapkan dapat memberikan bukti empiris mengenai determinan kecemasan pada gamer serta menyediakan instrumen deteksi dini yang selaras dengan SDG 3 Target 3.4.
 
 ### 1.2 Rumusan Masalah
 
-1. Bagaimana merancang, melatih, dan mengevaluasi tiga model prediksi (Linear Regression, XGBoost, dan LSTM) pada data deret waktu kasus DBD?
-2. Model manakah di antara Linear Regression, XGBoost, dan LSTM yang memberikan performa terbaik berdasarkan metrik MAE, RMSE, dan R² pada data uji kronologis?
+1. Bagaimana merumuskan deteksi risiko kecemasan sedang–berat (skor GAD-7 $\ge 10$) pada gamer online sebagai permasalahan klasifikasi biner tanpa menyertakan item-item kuesioner GAD sebagai fitur masukan (*leakage-free*)?
+2. Seberapa besar perbedaan kemampuan prediktif model antara penggunaan variabel pola bermain saja, penambahan atribut demografis, dan integrasi bersama faktor psikologis?
+3. Model manakah di antara Logistic Regression, XGBoost / Random Forest, dan Multi-Layer Perceptron (MLP) yang memberikan performa klasifikasi terbaik pada kondisi dataset yang tidak seimbang (*class imbalance*)?
+4. Fitur-fitur apa saja yang memiliki kontribusi paling signifikan (*feature importance*) terhadap prediksi risiko kecemasan pada pemain game berdasarkan analisis interpretasi model?
 
 ### 1.3 Tujuan Penelitian
 
-1. Mengolah dan menyelaraskan dataset harian kasus DBD dengan parameter cuaca BMKG di Jakarta Pusat periode 2021 sampai 2024 serta membentuk fitur jeda waktu (time lag).
-2. Membangun dan melatih model Linear Regression, XGBoost, dan LSTM dengan skema pembagian data secara kronologis.
-3. Menganalisis pengaruh fitur jeda waktu terhadap peningkatan akurasi estimasi pada ketiga model yang diuji.
-4. Membandingkan performa ketiga model menggunakan metrik MAE, RMSE, dan R² untuk menentukan model dengan kesalahan prediksi terendah.
-5. Menyusun simpulan hasil pemodelan sebagai bahan pendukung kewaspadaan dini penyebaran DBD yang selaras dengan SDG 3 Target 3.3.
+1. Membangun dan melatih model klasifikasi biner dengan target metrik evaluasi pada data uji berupa Macro-F1 $\ge 0,65$, recall kelas risiko tinggi $\ge 0,70$, dan ROC-AUC $\ge 0,78$.
+2. Menganalisis dan melaporkan komparasi performa model pada tiga skenario kombinasi fitur: Skenario A (Pola Bermain), Skenario B (Pola Bermain + Demografis), dan Skenario C (Pola Bermain + Demografis + Faktor Psikologis).
+3. Membandingkan performa tiga arsitektur model (Logistic Regression, XGBoost / Random Forest, dan MLP) menggunakan protokol evaluasi terstandarisasi berbasis *Stratified 5-Fold Cross-Validation*.
+4. Mengidentifikasi lima fitur teratas (*Top-5 features*) yang paling berpengaruh terhadap estimasi risiko kecemasan menggunakan metode *Permutation Importance* atau *SHapley Additive exPlanations* (SHAP).
+5. Menyusun simpulan hasil pemodelan sebagai acuan empiris dan rekomendasi sistem penapisan dini (*early screening tool*) guna mendukung pencapaian SDG 3 Target 3.4 dalam mempromosikan kesehatan mental.
 
 ### 1.4 Keterkaitan dengan SDGs dan Pertimbangan Etika
 
-Rincian keterkaitan penelitian ini dengan Sustainable Development Goals (SDG 3 Target 3.3) serta aspek etika pengolahan data disajikan pada Tabel 1.1:
+Rincian keterkaitan penelitian ini dengan Sustainable Development Goals (SDG 3 Target 3.4) serta aspek etika pengolahan data disajikan pada Tabel 1.1:
 
 #### Tabel 1.1: Keterkaitan dengan SDGs dan Pertimbangan Etika
 
 | Komponen Evaluasi | Deskripsi Keterkaitan dan Implementasi |
 | :--- | :--- |
 | **SDG yang Dipilih** | SDG 3: Kehidupan Sehat dan Sejahtera (Good Health and Well-being). |
-| **Target SDG Relevan** | Target 3.3: Mengakhiri epidemi AIDS, tuberkulosis, malaria, dan penyakit tropis terabaikan (NTDs) serta penyakit menular lainnya. |
-| **Masalah Nyata** | Tingginya potensi penyebaran DBD di permukiman padat Jakarta Pusat serta perlunya perkiraan awal lonjakan kasus berbasis cuaca untuk mendukung kesiapsiagaan dinas kesehatan. |
-| **Peran Machine Learning** | Machine learning dan deep learning digunakan untuk menemukan pola non-linear dan ketergantungan waktu antara perubahan cuaca dan siklus hidup nyamuk, guna memproyeksikan kasus pada periode berikutnya. |
-| **Indikator Kontribusi** | Tersedianya perbandingan performa model yang terukur (MAE, RMSE, R²) sebagai acuan teknis pengembangan sistem deteksi dini (early warning system). Kontribusi proyek ini bersifat tidak langsung terhadap mitigasi penyakit. |
-| **Pertimbangan Etika** | Dataset hanya menggunakan data agregat statistik per wilayah tanpa identitas pasien (bebas PII). Model ini dirancang sebagai alat bantu perencanaan dinas kesehatan, bukan sebagai penentu diagnosis medis individu. |
-| **Sumber Ide** | Kekhawatiran terhadap siklus tahunan kenaikan kasus DBD di DKI Jakarta dan ketersediaan data terbuka cuaca BMKG serta data surveilans Dinkes DKI. |
+| **Target SDG Relevan** | Target 3.4: Mengurangi sepertiga dari kematian dini akibat penyakit tidak menular melalui pencegahan dan pengobatan, serta meningkatkan kesehatan mental dan kesejahteraan. |
+| **Masalah Nyata** | Tingginya prevalensi kecemasan pada komunitas pemain game online yang berkorelasi dengan fenomena *gaming disorder* (ICD-11 WHO 2018), di mana penapisan konvensional membutuhkan kuesioner panjang yang memakan waktu dan bergantung pada partisipasi aktif responden. |
+| **Peran Machine Learning** | Machine learning dan deep learning dimanfaatkan untuk mengenali pola non-linear dan interaksi multivariat antara kebiasaan bermain, profil demografis, dan indikator psikologis, guna memprediksi status risiko kecemasan sedang–berat secara cepat dan non-invasif sebagai instrumen penapisan awal (*triage*). |
+| **Indikator Kontribusi** | Tersedianya perbandingan performa model yang terukur (Macro-F1, Recall, ROC-AUC, PR-AUC) yang memberikan landasan empiris bahwa intervensi kesehatan mental pada gamer tidak boleh semata-mata berfokus pada pembatasan jam bermain, melainkan harus menyentuh faktor psikologis yang mendasarinya. |
+| **Pertimbangan Etika** | 1. **Bukan Alat Diagnosis Klinis**: Model berfungsi semata-mata sebagai alat bantu penapisan awal (*early screening*), di mana vonis dan keputusan klinis mutlak berada di bawah wewenang tenaga medis dan psikolog profesional.<br>2. **Privasi & Kerahasiaan Data**: Dataset survei bersifat publik, teranonimkan sepenuhnya tanpa data identitas pribadi (bebas PII), dan hanya responden berstatus *Accept* yang digunakan dalam analisis.<br>3. **Keterbatasan dan Bias Sampel**: Data didominasi oleh pemain *League of Legends*, platform PC, berjenis kelamin pria, dan berasal dari negara-negara Barat (hanya 1 baris dari Indonesia), sehingga temuan tidak dapat langsung digeneralisasi untuk populasi lokal.<br>4. **Pencegahan Label Leakage**: Seluruh pertanyaan GAD (GAD1–GAD7, skor total, dan level GAD) dieliminasi dari daftar fitur untuk menjamin integritas model. |
+| **Sumber Ide** | Perhatian global terhadap isu kesehatan mental di kalangan gamer yang diakui oleh WHO serta tersedianya dataset terbuka *Online Gaming Anxiety Data* di Kaggle. |
 
 ---
 
@@ -68,7 +68,7 @@ Rincian keterkaitan penelitian ini dengan Sustainable Development Goals (SDG 3 T
 
 ### 2.1 Alur Kerangka Kerja ML Lifecycle (L-M-O-P)
 
-Pelaksanaan proyek ini mengikuti empat tahap Machine Learning Lifecycle: tahap Learning Problem (L) berfokus pada perumusan tugas regresi deret waktu multivariat dan pemeriksaan dataset; tahap Model Design (M) menentukan arsitektur tiga model (Linear Regression, XGBoost, dan LSTM); tahap Optimization (O) mencakup pembersihan data hilang, rekayasa fitur jeda waktu (time lag), penyetelan hyperparameter, dan fungsi loss MSE; serta tahap Predict and Evaluate (P) menguji prediksi pada data uji kronologis berbasis MAE, RMSE, dan R².
+Pelaksanaan proyek ini dirancang mengikuti empat tahapan terstruktur *Machine Learning Lifecycle*: tahap **Learning Problem (L)** berfokus pada formulasi tugas klasifikasi biner, telaah mendalam dataset terhadap potensi kebocoran label (*label leakage*), pemetaan target SDG 3.4, serta penentuan metrik evaluasi yang sensitif terhadap ketidakseimbangan kelas (*class imbalance*); tahap **Model Design (M)** menetapkan pemilihan arsitektur tiga tingkatan model (Logistic Regression sebagai *baseline*, XGBoost / Random Forest sebagai *advanced ensemble*, dan Multi-Layer Perceptron sebagai *deep learning*); tahap **Optimization (O)** mencakup pemfilteran kriteria responden `Accept`, pemangkasan outlier jam bermain ($< 84$ jam/minggu), pengelompokan teks kategori bebas, imputasi nilai hilang dan penskalaan fitur numerik yang terisolasi di dalam *pipeline* validasi, penanganan ketimpangan kelas menggunakan pembobotan kelas (*class weighting*), serta penyesuaian ambang batas klasifikasi (*threshold tuning*); serta tahap **Predict and Evaluate (P)** melakukan evaluasi komparatif menggunakan *Stratified 5-Fold Cross-Validation* dan pengujian akhir pada *hold-out test set* (20%) berbasis Macro-F1, Recall, ROC-AUC, PR-AUC, Confusion Matrix, dan interpretasi fitur menggunakan SHAP / Permutation Importance.
 
 ### 2.2 Formulasi Learning Problem dan Spesifikasi Dataset
 
@@ -78,43 +78,51 @@ Rumusan teknis masalah pembelajaran mesin dan spesifikasi dataset dirangkum pada
 
 | Komponen Masalah | Formulasi Formal dan Spesifikasi Teknis |
 | :--- | :--- |
-| **Target Prediksi** | Jumlah kasus DBD harian pada periode ke depan (t+k) di Jakarta Pusat. Jenis tugas adalah Supervised Time Series Regression. |
-| **Objective Matematis** | Meminimalkan fungsi loss Mean Squared Error (MSE) selama proses pelatihan model. Evaluasi akhir dihitung menggunakan metrik MAE, RMSE, dan R² pada data uji kronologis. |
-| **Karakteristik Dataset** | Data sekunder harian gabungan dari surveilans Dinkes DKI Jakarta dan stasiun cuaca BMKG Kemayoran melalui Kaggle (periode 1 Januari 2021 sampai 2024, total 2.923 baris data x 14 variabel). URL: https://www.kaggle.com/datasets/yutakatarokusumah/jakarta-dengue-weather-2021-2024/data. Variabel mencakup Suhu Minimum (TN), Suhu Maksimum (TX), Suhu Rata-rata (TAVG), Kelembapan (RH_AVG), Curah Hujan (RR), Penyinaran Matahari (SS), Kecepatan dan Arah Angin (FF_AVG, DDD_CAR), serta Kasus DBD (CASES). |
-| **Skema Partisi Data** | Data dibagi menjadi data latih (80% periode awal) dan data uji (20% periode akhir) berdasarkan urutan waktu tanpa pengacakan (no shuffle) untuk mencegah kebocoran data masa depan (data leakage). |
+| **Target Prediksi** | Status risiko kecemasan biner: `risiko_tinggi` = 1 jika total skor $\text{GAD-7} \ge 10$ (tingkat kecemasan sedang hingga berat), dan `risiko_tinggi` = 0 jika $\text{GAD-7} < 10$ (tingkat kecemasan minimal hingga ringan). Jenis tugas adalah Supervised Binary Classification (dengan opsi klasifikasi 4 kelas ordinal sebagai eksperimen tambahan). |
+| **Objective Matematis** | Memaksimalkan skor Macro-F1 dan Recall pada kelas risiko tinggi ($\approx 17,5\%$ proporsi data) dengan meminimalkan fungsi loss *Weighted Binary Cross-Entropy* untuk mengompensasi ketidakseimbangan kelas. Evaluasi komprehensif didukung oleh metrik ROC-AUC, PR-AUC, dan Confusion Matrix pada data uji. |
+| **Karakteristik Dataset** | Dataset sekunder tabular *Online Gaming Anxiety Data* yang dihimpun melalui survei daring sukarela oleh Divyansh22 di platform Kaggle (total $13.464$ baris $\times$ $55$ variabel, tersaring menjadi $13.050$ baris setelah pemfilteran kriteria inklusi status responden `Accept`). URL: https://www.kaggle.com/datasets/divyansh22/online-gaming-anxiety-data. Fitur terpakai mencakup Pola Bermain (`Hours`, `streams`, `Game`, `Platform`, `whyplay`, `Playstyle`), Demografis (`Age`, `Gender`, `Work`, `Degree`), serta Faktor Psikologis (`SWL_T` / Kepuasan Hidup, `SPIN_T` / Fobia Sosial, dan `Narcissism`). Fitur yang dieksklusikan demi mencegah *data leakage* mencakup `GAD1`–`GAD7`, `GAD_T`, `GADE`, `highestleague` (banyak nilai hilang), `Timestamp`, serta atribut penanda lokasi. |
+| **Skema Partisi Data** | Data dibagi menjadi data latih (80%) dan data uji (*hold-out test set*, 20%) menggunakan *Stratified Split* untuk menjaga rasio distribusi kelas target. Pada data latih, diterapkan *Stratified 5-Fold Cross-Validation* untuk penyetelan hyperparameter. Seluruh tahapan imputasi, penskalaan, dan pra-pemrosesan dienkapsulasi di dalam *fold pipeline* guna mencegah kebocoran informasi (*data leakage*). |
 
 ---
 
 ## BAB III. RENCANA PENDEKATAN PEMODELAN DAN EVALUASI
 
-### 3.1 Model Baseline: Linear Regression
+### 3.1 Model Baseline: Logistic Regression
 
-Model acuan dasar (baseline) yang digunakan adalah Ordinary Least Squares (OLS) Linear Regression. Model ini dipilih karena bersifat parametrik, sederhana, cepat dilatih, dan koefisien bobotnya mudah diinterpretasikan. Linear Regression berfungsi sebagai tolok ukur awal untuk mengetahui sejauh mana korelasi linear langsung antara parameter cuaca dan angka kasus DBD dapat menjelaskan variansi data target.
+Model acuan dasar (*baseline*) yang digunakan adalah Logistic Regression dengan konfigurasi bobot kelas seimbang (`class_weight='balanced'`). Model ini dipilih karena bersifat parametrik, sederhana, efisien dalam komputasi, dan koefisien bobotnya mudah diinterpretasikan dalam bentuk *log-odds* untuk menganalisis arah korelasi fitur terhadap risiko kecemasan. Logistic Regression berfungsi sebagai tolok ukur awal guna menilai sejauh mana batas keputusan linear dapat memisahkan kedua kelas risiko sebelum beralih ke model yang lebih rumit.
 
-Secara matematis, prediksi dihitung melalui kombinasi linear dari variabel input dengan meminimalkan jumlah kuadrat galat (sum of squared residuals). Hasil pengujian model dasar ini akan menjadi pembanding untuk menilai apakah model non-linear dan model sekuensial yang lebih kompleks memberikan peningkatan performa yang berarti.
+Secara matematis, model menghitung kombinasi linear dari fitur masukan dan memetakannya melalui fungsi sigmoid ke dalam probabilitas kontinu antara 0 dan 1. Hasil pengujian model dasar ini akan menjadi pembanding utama untuk membuktikan apakah algoritma non-linear dan jaringan saraf tiruan memberikan peningkatan akurasi dan recall yang signifikan. Sebagai pelengkap pada tahap eksplorasi awal, algoritma Gaussian Naïve Bayes juga dapat diikutsertakan sebagai pembanding tambahan karena kerap dirujuk dalam literatur klasifikasi kecemasan terdahulu.
 
-### 3.2 Model Advanced Machine Learning: XGBoost Regressor
+### 3.2 Model Advanced Machine Learning: XGBoost / Random Forest Classifier
 
-Model machine learning lanjutan yang digunakan adalah XGBoost (Extreme Gradient Boosting) Regressor. XGBoost merupakan algoritma ensemble berbasis pohon keputusan berulang (gradient boosted decision trees) yang terbukti efektif untuk data tabular multivariat. Keunggulan XGBoost adalah kemampuannya memodelkan hubungan non-linear dan interaksi antarfaktor cuaca tanpa memerlukan asumsi kenormalan distribusi data.
+Model machine learning tingkat lanjut yang diterapkan adalah algoritma ensemble berbasis pohon, yaitu XGBoost (*Extreme Gradient Boosting*) Classifier atau Random Forest Classifier. Algoritma ensemble berbasis pohon sangat unggul dalam memproses data tabular campuran (fitur numerik dan kategorikal) serta memiliki ketahanan alami terhadap perbedaan skala fitur dan keberadaan pencilan (*outliers*).
 
-XGBoost juga mengintegrasikan fungsi regularisasi L1 (Lasso) dan L2 (Ridge) untuk mengontrol kompleksitas pohon serta meminimalkan risiko overfitting pada data harian. Penyetelan hyperparameter seperti learning rate, kedalaman pohon (max_depth), dan jumlah estimator akan dilakukan untuk memperoleh hasil terbaik.
+XGBoost secara khusus mampu menangkap hubungan non-linear kompleks dan interaksi multivariat antarfaktor psikologis dan pola bermain tanpa memerlukan asumsi normalitas distribusi data. Selain itu, XGBoost mengintegrasikan fungsi regularisasi L1 (*Lasso*) dan L2 (*Ridge*) untuk mengontrol kompleksitas pohon keputusan dan mencegah *overfitting*. Optimasi hyperparameter seperti *learning rate*, kedalaman pohon (*max_depth*), jumlah pohon (*n_estimators*), dan penyesuaian *scale_pos_weight* akan dilakukan menggunakan validasi silang pada data latih.
 
-### 3.3 Model Deep Learning: Long Short-Term Memory (LSTM)
+### 3.3 Model Deep Learning: Multi-Layer Perceptron (MLP)
 
-Model deep learning yang diterapkan adalah arsitektur Long Short-Term Memory (LSTM). LSTM merupakan varian Recurrent Neural Network (RNN) yang dirancang khusus untuk menangani data deret waktu panjang tanpa kendala hilangnya gradien (vanishing gradient). Arsitektur ini menggunakan mekanisme gerbang (forget gate, input gate, dan output gate) untuk menyaring informasi mana yang perlu disimpan atau dibuang di sepanjang deret waktu.
+Model *deep learning* yang diaplikasikan adalah arsitektur Multi-Layer Perceptron (MLP) dengan 2 hingga 3 lapisan tersembunyi (*hidden layers*). Arsitektur ini dirancang untuk menguji efektivitas representasi fitur bertingkat pada data tabular berukuran menengah ($13.050$ sampel). Setiap lapisan tersembunyi dilengkapi fungsi aktivasi non-linear (seperti ReLU), normalisasi *Batch Normalization*, serta lapisan *Dropout* dengan rasio $0,2$ hingga $0,5$ untuk mereduksi risiko *co-adaptation* neuron.
 
-Karena penularan DBD memiliki jeda waktu biologis terhadap perubahan cuaca beberapa minggu sebelumnya, input untuk LSTM disusun menggunakan metode jendela geser (sliding window). Dengan cara ini, model dapat mempelajari pola ketergantungan temporal dari riwayat cuaca masa lalu guna memproyeksikan kasus DBD pada hari-hari berikutnya.
+Pelatihan model memanfaatkan optimizer Adam dengan penyesuaian tingkat pembelajaran (*learning rate schedule*) dan fungsi loss *Weighted Binary Cross-Entropy* untuk memitigasi dampak ketidakseimbangan kelas. Mekanisme *Early Stopping* berbasis loss validasi diterapkan untuk menghentikan pelatihan saat model mulai mengalami *overfitting*. Implementasi ini bertujuan menguji secara empiris apakah arsitektur *deep learning* mampu memberikan generalisasi yang lebih baik atau sebanding dengan model ensemble pohon pada data tabular kesehatan mental.
 
 ### 3.4 Desain Eksperimen dan Metrik Pengujian
 
-Semua model diuji menggunakan protokol eksperimen yang seragam pada partisi data kronologis yang sama tanpa pengacakan data. Evaluasi kuantitatif menggunakan tiga metrik: Mean Absolute Error (MAE) untuk mengukur rata-rata kesalahan absolut, Root Mean Squared Error (RMSE) untuk memberikan bobot penalti lebih besar pada deviasi kesalahan yang tinggi, serta koefisien determinasi (R²) untuk mengukur seberapa baik variansi kasus DBD dapat dijelaskan oleh model.
+Seluruh model dievaluasi secara konsisten menggunakan protokol eksperimental yang seragam:
+1. **Tiga Skenario Fitur (Ablation Study)**: Pengujian dilakukan pada Skenario A (Pola Bermain saja), Skenario B (Pola Bermain + Demografis), dan Skenario C (Pola Bermain + Demografis + Faktor Psikologis) untuk mengisolasi seberapa besar daya prediksi masing-masing kelompok variabel.
+2. **Protokol Validasi Silang**: Diterapkan *Stratified 5-Fold Cross-Validation* pada 80% data latih (dilaporkan dalam rata-rata $\pm$ standar deviasi) untuk memilih arsitektur terbaik dan menyetel ambang batas keputusan (*optimal decision threshold*), dilanjutkan dengan pengujian final pada 20% *hold-out test set*.
+3. **Metrik Evaluasi**: Mengingat distribusi kelas yang tidak seimbang ($\approx 17,5\%$ kelas positif), evaluasi menitikberatkan pada metrik **Macro-F1 Score** untuk keseimbangan performa antarkelas, **Recall (Kelas Risiko Tinggi)** untuk meminimalkan *false negative* (pasien berisiko yang terlewat), serta **ROC-AUC** dan **PR-AUC** untuk menilai performa diskriminasi probabilitas secara menyeluruh.
+4. **Analisis Kepentingan Fitur**: Menentukan lima fitur teratas (*Top-5 features*) yang paling berpengaruh terhadap keluaran model menggunakan analisis *Permutation Feature Importance* atau nilai *SHapley Additive exPlanations* (SHAP).
 
 ---
 
 ## DAFTAR PUSTAKA
 
-Ichwani, A. S., & Wibawa, H. A. (2019). Prediksi angka kejadian Demam Berdarah Dengue (DBD) berdasarkan faktor cuaca menggunakan metode Extreme Learning Machine (Studi kasus Kecamatan Tembalang). *Jurnal IPTEK*, 23(1), 31-34. https://doi.org/10.31284/j.iptek.2019.v23i1.471
+Divyansh22. (n.d.). *Online gaming anxiety data* [Data set]. Kaggle. https://www.kaggle.com/datasets/divyansh22/online-gaming-anxiety-data
 
-Syahbani, A. N., & Sukendra, D. M. (2020). Peramalan jumlah kasus Demam Berdarah Dengue berdasarkan surveilans kasus dan curah hujan. *HIGEIA Journal of Public Health Research and Development*, 4(1), 84-95. https://doi.org/10.15294/higeia.v4i1/33686
+Karthik, M. A., & Ashokkumar, S. (2023). Predicting the link between online gaming and mental disorders in youth: RNN vs J48 decision tree. *Proceedings of the International Conference on Health Informatics*, 403–408. SciTePress. https://doi.org/10.5220/0012504900003739
 
-Tarmana, D. (2014). Potensi peluang Demam Berdarah Dengue (DBD) berdasarkan proyeksi perubahan iklim (Studi kasus: DKI Jakarta). *The Indonesian Journal of Infectious Disease*, 1(1), 12-19.
+Latubessy, A., Wardoyo, R., Musdholifah, A., & Kusrohmaniah, S. (2024). Fine tuning attribute weighted naïve Bayes model for detecting anxiety disorder levels of online gamers. *International Journal of Electrical and Computer Engineering*, 14(3), 3277–3286. https://doi.org/10.11591/ijece.v14i3.pp3277-3286
+
+Latubessy, A., Wardoyo, R., Musdholifah, A., & Kusrohmaniah, S. (2025). Fine-tuned attribute weighted naïve Bayes with modified partial instances reduction for gaming disorder classification. *HighTech and Innovation Journal*, 6(1), 1-14. https://doi.org/10.28991/HIJ-2025-06-01-05
+
+Spitzer, R. L., Kroenke, K., Williams, J. B. W., & Löwe, B. (2006). A brief measure for assessing generalized anxiety disorder: The GAD-7. *Archives of Internal Medicine*, 166(10), 1092–1097. https://doi.org/10.1001/archinte.166.10.1092
