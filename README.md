@@ -2,7 +2,7 @@
 
 | Komponen | Keterangan |
 | :--- | :--- |
-| **Judul Proyek** | Deteksi Dini Risiko Kecemasan Sedang–Berat pada Gamer Online Berdasarkan Pola Bermain dan Faktor Psikologis Menggunakan Machine Learning |
+| **Judul Proyek** | Klasifikasi Risiko Kecemasan pada Gamer Online Berdasarkan Pola Bermain dan Faktor Psikologis |
 | **Kelompok / Kelas** | Kelompok 2 / TRPL 5B |
 | **Nama Mahasiswa** | 1. Mohammad Hanif Huda A (NIM: 244311049)<br>2. Muhammad Akbar Fadilah (NIM: 244311051)<br> |
 | **Program Studi** | Rekayasa Perangkat Lunak (TRPL) |
