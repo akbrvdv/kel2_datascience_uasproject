@@ -1,14 +1,13 @@
 ## INFORMASI PROYEK
 
-**Judul Proyek:**  
-Deteksi Dini Risiko Kecemasan Sedang–Berat pada Gamer Online Berdasarkan Pola Bermain dan Faktor Psikologis Menggunakan Pendekatan Multi-Model (Logistic Regression, Random Forest, dan ResNet)
+**Judul Proyek:** Deteksi Dini Risiko Kecemasan Sedang–Berat pada Gamer Online Berdasarkan Pola Bermain dan Faktor Psikologis Menggunakan Pendekatan Multi-Model (Logistic Regression, Random Forest, dan ResNet)
 
 **Kelompok / Kelas:** Kelompok 2 / TRPL 5B  
 **Nama Mahasiswa:**  
 1. Mohammad Hanif Huda A (NIM: 244311049)  
 2. Muhammad Akbar Fadilah (NIM: 244311051)  
 
-**Program Studi:** Teknologi Rekayasa Perangkat Lunak (TRPL)  
+**Program Studi:** Teknologi Rekayasa Perangkat Lunak (TRPL)
 **Mata Kuliah:** Data Science  
 **Dosen Pengampu:** Gus Nanang Syaifuddiin, S.Kom., M.Kom.  
 **Tahun Akademik:** 2026/2027, Semester Gasal (Semester 5)  
@@ -16,20 +15,6 @@ Deteksi Dini Risiko Kecemasan Sedang–Berat pada Gamer Online Berdasarkan Pola 
 **Link Video Pembahasan:** [URL Video YouTube/Drive - Tersedia pada Tahap Final Evaluasi]  
 **SDG yang Dipilih:** SDG 3 – Kehidupan Sehat dan Sejahtera (Good Health and Well-being)  
 **Target SDG yang Relevan:** Target 3.4 – Mengurangi sepertiga dari kematian dini akibat penyakit tidak menular melalui pencegahan dan pengobatan, serta meningkatkan kesehatan mental dan kesejahteraan.
-=======
-| Komponen | Keterangan |
-| :--- | :--- |
-| **Judul Proyek** | Klasifikasi Risiko Kecemasan pada Gamer Online Berdasarkan Pola Bermain dan Faktor Psikologis |
-| **Kelompok / Kelas** | Kelompok 2 / TRPL 5B |
-| **Nama Mahasiswa** | 1. Mohammad Hanif Huda A (NIM: 244311049)<br>2. Muhammad Akbar Fadilah (NIM: 244311051)<br> |
-| **Program Studi** | Rekayasa Perangkat Lunak (TRPL) |
-| **Mata Kuliah** | Data Science |
-| **Dosen Pengampu** | Gus Nanang Syaifuddiin, S.Kom., M.Kom. |
-| **Tahun Akademik** | 2026/2027, Semester Gasal (Semester 5) |
-| **Link Repository GitHub** | https://github.com/akbrvdv/kel2_datascience_uasproject |
-| **SDG yang Dipilih** | SDG 3: Kehidupan Sehat dan Sejahtera (Good Health and Well-being) |
-| **Target SDG Relevan** | Target 3.4: Mengurangi sepertiga dari kematian dini akibat penyakit tidak menular melalui pencegahan dan pengobatan, serta meningkatkan kesehatan mental dan kesejahteraan. |
-
 
 ---
 
