@@ -241,6 +241,142 @@ Untuk menjawab permasalahan di atas, proyek ini mengimplementasikan tiga model p
 
 ---
 
+## 4. DATA UNDERSTANDING  **[L]**
+
+Bab ini mendokumentasikan pemahaman awal atas data sebelum pemodelan. Eksplorasi yang dapat dijalankan ulang tersedia pada [notebooks/01_learning_problem_eda.ipynb](notebooks/01_learning_problem_eda.ipynb).
+
+### 4.1 Informasi Dataset
+
+Dataset yang digunakan adalah *Online Gaming Anxiety Data* dari Kaggle (Divyansh22). Dataset ini merupakan hasil survei terbuka yang telah dianonimkan, sehingga unit analisisnya adalah seorang responden gamer online, bukan rekaman aktivitas permainan secara langsung.
+
+| Aspek | Keterangan |
+|---|---|
+| Berkas sumber | `data/GamingStudy_data.csv` |
+| Format dan encoding | CSV, dibaca dengan encoding `latin1` |
+| Ukuran awal | 13.464 baris x 55 kolom; sekitar 8,26 MB di memori |
+| Kriteria inklusi | Hanya responden dengan `accept == 'Accept'` |
+| Sampel valid hasil inklusi | 13.050 responden |
+| Sampel setelah aturan kualitas `Hours <= 84` | 12.981 responden |
+| Jenis data | Tabular campuran: numerik diskret/kontinu serta kategorikal nominal |
+| Target turunan | `risiko_tinggi = 1` bila `GAD_T >= 10`; selain itu `0` |
+
+Penyaringan status persetujuan mengeluarkan 414 baris yang tidak memiliki nilai `accept`. Tahap berikutnya mengeluarkan 42 jawaban dengan `Hours > 84` serta baris dengan nilai `Hours` kosong melalui aturan filter yang sama. Batas 84 jam per minggu dipilih sebagai batas kewajaran (rata-rata maksimum 12 jam per hari), bukan sebagai batas klinis.
+
+### 4.2 Deskripsi Fitur
+
+Tabel berikut merangkum kelompok fitur pada data mentah. Kolom yang digunakan sebagai masukan model ditetapkan kembali pada Bab 5 agar pemilihan fitur dan pencegahan *leakage* dapat ditelusuri dengan jelas.
+
+| Kelompok | Kolom utama | Tipe | Peran dalam proyek |
+|---|---|---|---|
+| Identitas dan administrasi | `S. No.`, `Timestamp`, `accept`, `Reference` | Numerik/kategorikal | Identitas, waktu pengisian, status persetujuan, dan sumber rujukan; tidak menjadi fitur model. |
+| Kecemasan GAD-7 | `GAD1`–`GAD7`, `GADE`, `GAD_T` | Numerik/kategorikal | `GAD_T` membentuk target; seluruh kelompok ini dikeluarkan dari masukan karena dapat membocorkan label. |
+| Kepuasan hidup | `SWL1`–`SWL5`, `SWL_T` | Numerik | Indikator kepuasan hidup; `SWL_T` dipakai sebagai indikator psikologis agregat. |
+| Fobia sosial | `SPIN1`–`SPIN17`, `SPIN_T` | Numerik | Indikator fobia sosial; `SPIN_T` dipakai sebagai indikator psikologis agregat. |
+| Pola bermain | `Game`, `Platform`, `Hours`, `earnings`, `whyplay`, `League`, `highestleague`, `streams`, `Playstyle` | Numerik/kategorikal | Menggambarkan kebiasaan dan preferensi bermain; kategori relevan diringkas pada Bab 5. |
+| Demografi | `Gender`, `Age`, `Work`, `Degree` | Numerik/kategorikal | Variabel karakteristik responden yang dapat mendukung pola risiko. |
+| Lokasi | `Birthplace`, `Residence`, `Birthplace_ISO3`, `Residence_ISO3` | Kategorikal | Tidak digunakan agar model tidak bergantung pada lokasi dan karena tingkat kategori sangat beragam. |
+| Skala lain | `Narcissism` | Numerik | Indikator psikologis pendukung. |
+
+### 4.3 Kondisi dan Kualitas Data
+
+**Missing values.** Pada 13.050 responden berstatus `Accept`, nilai kosong tidak tersebar merata. `highestleague` kosong pada seluruh baris sehingga dieliminasi. Kolom `League` kosong pada 1.800 baris (13,79%), `Degree` pada 1.536 baris (11,77%), `GADE` pada 631 baris (4,84%), dan `SPIN_T` pada 618 baris (4,74%). Pada fitur yang tetap dipakai, kekosongan ditangani nanti melalui imputasi yang hanya di-*fit* pada data latih. Kolom `Hours` memiliki 27 nilai kosong dan `streams` 95 nilai kosong; keduanya juga ditangani sesuai pipeline Bab 5 setelah pemisahan data.
+
+**Duplikasi.** `S. No.` dan `Timestamp` adalah identitas/pencatat waktu survei, bukan sinyal perilaku. Pemeriksaan dilakukan pada rekaman responden sebelum pemodelan; tidak ada proses penghapusan duplikasi yang diterapkan dalam notebook karena tidak ditemukan kebutuhan deduplikasi yang dapat dipertanggungjawabkan tanpa berisiko menghapus responden berbeda dengan jawaban serupa.
+
+**Outlier dan noise.** Fitur `Hours` mengandung nilai ekstrem hingga 8.000 jam per minggu, padahal satu minggu hanya memiliki 168 jam. Sebanyak 42 responden valid mempunyai `Hours > 84`, sehingga diperlakukan sebagai jawaban tidak masuk akal/kesalahan input dan dikeluarkan. Setelah pemangkasan, distribusi `Hours` lebih masuk akal: Q1 = 12, median = 20, dan Q3 = 28 jam per minggu. Penskalaan yang tahan pencilan (*RobustScaler*) tetap digunakan pada fitur numerik yang masuk ke model.
+
+**Ketimpangan kelas.** Dari data berstatus `Accept` sebelum filter `Hours`, kelas risiko rendah berjumlah 10.765 (82,49%) dan kelas risiko sedang–berat berjumlah 2.285 (17,51%), atau sekitar 1 : 4,71. Karena itu, akurasi tidak dipakai sebagai satu-satunya indikator; proyek menggunakan Macro-F1, recall kelas positif, ROC-AUC, dan PR-AUC serta pembobotan kelas.
+
+### 4.4 Exploratory Data Analysis (EDA)
+
+Tiga visualisasi berikut dihasilkan pada notebook EDA. Visualisasi dipakai untuk menetapkan keputusan persiapan data, bukan untuk memasukkan variabel GAD sebagai fitur.
+
+| Visualisasi | Temuan utama | Implikasi |
+|---|---|---|
+| Distribusi target `risiko_tinggi` | Kelas positif hanya 17,51%; prediktor yang selalu memilih kelas 0 dapat tampak akurat tetapi tidak berguna untuk skrining. | Gunakan split terstratifikasi, *class weight*, dan metrik yang sensitif pada kelas minoritas. |
+| Histogram/boxplot `Hours` | Terdapat 42 nilai di atas 84 jam/minggu dan nilai maksimum mentah 8.000 jam/minggu; setelah pemangkasan, mayoritas responden bermain sekitar 2–4 jam per hari. | Terapkan batas kualitas `Hours <= 84` sebelum split dan gunakan penskalaan robust. |
+| Matriks korelasi faktor psikologis dengan kecemasan | `SPIN_T` berkorelasi positif paling kuat dengan `GAD_T` (r = +0,45) dan `risiko_tinggi` (r = +0,35); `SWL_T` berkorelasi negatif dengan `GAD_T` (r = -0,40); korelasi linear `Hours` dengan `GAD_T` lemah (r = +0,10). | Risiko tidak cukup dijelaskan oleh durasi bermain saja. Model perlu menggabungkan pola bermain, demografi, dan indikator psikologis eksternal yang bebas dari butir GAD. |
+
+**Ringkasan Bab 4.** Data layak untuk klasifikasi biner setelah menerapkan kriteria inklusi dan aturan kualitas jam bermain. Risiko utama yang teridentifikasi ialah *label leakage* melalui keluarga GAD, *class imbalance*, nilai `Hours` ekstrem, dan nilai hilang. Keempatnya ditangani secara eksplisit pada Bab 5.
+
+---
+
+## 5. DATA PREPARATION  **[L]**
+
+Seluruh proses pada bab ini dapat direproduksi melalui [notebooks/02_data_preparation.ipynb](notebooks/02_data_preparation.ipynb). *Random seed* ditetapkan ke `42` agar pembagian data dapat diulang secara konsisten.
+
+### 5.1 Pembersihan Data dan Pembentukan Target
+
+Urutan pembersihan dilakukan sebagai berikut:
+
+1. Membaca CSV dengan `latin1`, lalu hanya mempertahankan `accept == 'Accept'` (13.050 baris).
+2. Menerapkan aturan kualitas `Hours <= 84`, sehingga tersisa 12.981 baris untuk pemodelan.
+3. Membentuk target biner `risiko_tinggi` dari `GAD_T`: 1 untuk `GAD_T >= 10` dan 0 untuk nilai di bawahnya.
+4. Mengeluarkan 19 kolom dari kandidat fitur: seluruh kolom GAD (`GAD1`–`GAD7`, `GAD_T`, `GADE`) sebagai sumber *label leakage*; serta `S. No.`, `Timestamp`, `accept`, `highestleague`, `League`, `Birthplace`, `Residence`, `Reference`, `Residence_ISO3`, dan `Birthplace_ISO3` yang berupa identitas, metadata, sangat kosong, atau berpotensi membuat model terlalu spesifik pada lokasi.
+
+Hasil langkah ini adalah 36 fitur kandidat sebelum rekayasa fitur. Target `GAD_T` hanya digunakan satu kali untuk membentuk `risiko_tinggi` dan tidak ikut ke dalam matriks `X`.
+
+### 5.2 Feature Engineering dan Seleksi Fitur
+
+Untuk membatasi kardinalitas kategori serta membuat representasi lebih stabil, fitur tekstual direkayasa menjadi berikut:
+
+| Fitur asal | Transformasi | Hasil |
+|---|---|---|
+| `Game` | Mempertahankan `League of Legends`, `Counter Strike`, `Starcraft 2`, `World of Warcraft`, dan `Other`; kategori lain digabung sebagai `Other`. | `Game_Clean` |
+| `Playstyle` | Mempertahankan empat gaya bermain terumum (tiga variasi multiplayer dan `Singleplayer`); sisanya menjadi `Other`. | `Playstyle_Clean` |
+| `whyplay` | Mempertahankan `having fun`, `improving`, `winning`, dan `relaxing`; sisanya menjadi `Other`. | `whyplay_Clean` |
+| `SPIN_T`, `SWL_T` | Membentuk rasio fobia sosial terhadap kepuasan hidup: `SPIN_T / (SWL_T + 1.0)`. Konstanta 1 mencegah pembagian nol. | `SPIN_SWL_Ratio` |
+
+Kolom teks asal `Game`, `Playstyle`, dan `whyplay` kemudian diganti dengan versi bersihnya. Matriks kandidat setelah rekayasa berisi 37 kolom. Pipeline model memilih tujuh fitur numerik (`Hours`, `streams`, `Age`, `SWL_T`, `SPIN_T`, `Narcissism`, `SPIN_SWL_Ratio`) dan tujuh fitur kategorikal (`Platform`, `Gender`, `Work`, `Degree`, `Game_Clean`, `Playstyle_Clean`, `whyplay_Clean`). Skor agregat `SWL_T` dan `SPIN_T` diprioritaskan agar butir kuesioner individual yang sangat berkorelasi tidak mendominasi representasi.
+
+### 5.3 Transformasi Data Tanpa Leakage
+
+Transformasi dipisahkan berdasarkan tipe fitur dan dibungkus dalam `ColumnTransformer`:
+
+| Kelompok | Langkah transformasi | Alasan |
+|---|---|---|
+| Numerik | `SimpleImputer(strategy='median')` → `RobustScaler()` | Median tahan terhadap pencilan; `RobustScaler` menggunakan median dan IQR sehingga lebih stabil untuk distribusi miring seperti jam bermain. |
+| Kategorikal | `SimpleImputer(strategy='most_frequent')` → `OneHotEncoder(handle_unknown='ignore', sparse_output=False)` | Mengisi nilai kosong dengan kategori paling umum dan mengubah kategori nominal tanpa memberi urutan palsu; kategori baru di data uji tidak menyebabkan kegagalan transformasi. |
+
+Penting: `fit_transform()` dilakukan **hanya pada `X_train`**. Parameter imputasi, median/IQR scaler, dan daftar kategori encoder tidak pernah mempelajari `X_test`; data uji hanya menerima `transform()`. Hasilnya berbentuk 36 dimensi: `X_train_proc` berukuran `(10.384, 36)` dan `X_test_proc` berukuran `(2.597, 36)`. Verifikasi notebook menunjukkan tidak ada nilai NaN tersisa pada kedua matriks hasil transformasi.
+
+### 5.4 Pembagian Data
+
+Data dibagi menggunakan `train_test_split` dengan konfigurasi `test_size=0.20`, `stratify=y`, dan `random_state=42`.
+
+| Partisi | Jumlah sampel | Proporsi kelas positif | Penggunaan |
+|---|---:|---:|---|
+| Data latih | 10.384 | 17,38% | Pelatihan model, *fitting* preprocessing, dan validasi silang/tuning. |
+| Data uji hold-out | 2.597 | 17,40% | Evaluasi akhir saja; tidak digunakan untuk *fit*, pemilihan fitur, scaling, tuning, atau balancing. |
+
+Stratifikasi menjaga prevalensi risiko tinggi hampir sama pada kedua partisi. Untuk tahap tuning selanjutnya, notebook menyiapkan `StratifiedKFold` sehingga rasio kelas juga dapat dijaga pada setiap *fold* data latih.
+
+### 5.5 Penanganan Class Imbalance
+
+Strategi utama adalah *cost-sensitive learning*, bukan *oversampling* pada data uji. Bobot dihitung hanya dari `y_train` menggunakan `compute_class_weight(class_weight='balanced')` dan menghasilkan:
+
+| Kelas | Makna | Bobot |
+|---|---|---:|
+| 0 | Risiko rendah/minimal | 0,6052 |
+| 1 | Risiko sedang–berat | 2,8765 |
+
+Bobot tersebut digunakan sebagai `class_weight='balanced'`/ekuivalennya pada Logistic Regression dan Random Forest, serta sebagai bobot *Weighted Binary Cross-Entropy* pada ResNet. Notebook juga menyediakan demonstrasi SMOTE sebagai opsi, tetapi pustaka `imblearn` belum tersedia pada eksekusi saat ini; karena itu, hasil pipeline yang dipakai tetap pembobotan kelas. Jika SMOTE dipakai pada eksperimen berikutnya, resampling hanya boleh dilakukan setelah split dan hanya pada data/fold latih.
+
+### 5.6 Ringkasan Keputusan Preparation
+
+| Risiko yang ditemukan | Keputusan | Jaminan integritas |
+|---|---|---|
+| Kebocoran label dari GAD | Keluarkan `GAD1`–`GAD7`, `GAD_T`, dan `GADE` dari `X`. | Model tidak menerima butir pembentuk target. |
+| Jam bermain tidak masuk akal | Filter `Hours <= 84`. | Menghilangkan 42 jawaban ekstrem yang tidak kredibel. |
+| Missing values | Imputasi median/modus di dalam pipeline. | Parameter imputasi dipelajari dari data latih saja. |
+| Skala dan distribusi numerik | `RobustScaler`. | Lebih tahan terhadap nilai ekstrem tersisa. |
+| Kategori baru/beragam | Penggabungan kategori langka dan `OneHotEncoder(handle_unknown='ignore')`. | Dimensi fitur konsisten pada data uji. |
+| Kelas tidak seimbang | Bobot kelas dari `y_train`. | Kelas positif diberi penalti kesalahan lebih tinggi tanpa menyentuh data uji. |
+
+Dengan demikian, keluaran Bab 5 adalah dua matriks fitur siap latih yang bersih, konsisten, dan bebas *data leakage*, beserta target serta bobot kelas yang siap dipakai pada Bab 6.
+
+---
+
 ## DAFTAR PUSTAKA
 
 Breiman, L. (2001). Random forests. *Machine Learning*, 45(1), 5–32. https://doi.org/10.1023/A:1010933404324
