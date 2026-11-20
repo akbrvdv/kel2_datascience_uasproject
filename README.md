@@ -169,13 +169,6 @@ Untuk menjawab permasalahan di atas, proyek ini mengimplementasikan tiga model p
   $$P(y=1|\mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b) = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}$$
 * **Alasan Pemilihan:**  
   Dipilih sebagai *baseline* pembanding standar karena kesederhanaannya, efisiensi komputasi yang tinggi, dan transparansi koefisien bobot (*log-odds*) yang memudahkan analisis arah hubungan antara fitur dan risiko kecemasan. Model ini menetapkan batas bawah (*lower bound*) performa linear yang harus dilampaui oleh model yang lebih kompleks.
-* **Hypothesis Space & Inductive Bias:**  
-  - *Model Family:* Generalized Linear Model (GLM).
-  - *Hypothesis Space:* Himpunan semua bidang pemisah linear (*hyperplanes*) berdimensi $d$ dalam ruang fitur: $\mathcal{H}_{LR} = \{ f(\mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b) \mid \mathbf{w} \in \mathbb{R}^d, b \in \mathbb{R} \}$.
-  - *Inductive Bias:* Mengasumsikan batas keputusan (*decision boundary*) bersifat linear dan log-odds probabilitas kelas target merupakan kombinasi linear dari fitur masukan. Tidak mengasumsikan interaksi fitur otomatis kecuali ditambahkan secara eksplisit.
-  - *Kesesuaian Data:* Berfungsi sebagai tolok ukur cepat, namun diprediksi kurang optimal menangkap interaksi multi-arah antara durasi bermain dan tekanan fobia sosial yang cenderung non-linear.
-* **Strategi Optimasi:**  
-  Mengoptimalkan fungsi loss *Weighted Binary Cross-Entropy* dengan penalti regularisasi $L_2$ (*Ridge penalty*), solver `lbfgs`, parameter regularisasi $C=1.0$, dan konfigurasi `class_weight='balanced'` untuk mengimbangi ketimpangan proporsi data.
 
 ---
 
@@ -190,17 +183,6 @@ Untuk menjawab permasalahan di atas, proyek ini mengimplementasikan tiga model p
   3. Mampu menangkap hubungan non-linear kompleks dan interaksi multivariat tanpa membutuhkan rekayasa fitur polinomial manual.
   4. Mereduksi variansi secara dramatis dibandingkan pohon tunggal (*Decision Tree*), sehingga lebih tahan terhadap risiko *overfitting*.
   5. Menyediakan metrik *Feature Importance* (Gini Impurity reduction) bawaan untuk interpretasi determinan kecemasan.
-* **Keunggulan & Kelemahan:**  
-  - *Keunggulan:* Performa tinggi pada data tabular, tidak memerlukan normalisasi data, tahan terhadap *noise*, dan mampu mengevaluasi *out-of-bag* (OOB) error.
-  - *Kelemahan:* Kompleksitas memori dan waktu inferensi meningkat seiring bertambahnya jumlah pohon; interpretasi individual tidak seringkas model linear.
-* **Hypothesis Space & Inductive Bias:**  
-  - *Model Family:* Non-parametric Decision Tree Ensemble.
-  - *Hypothesis Space:* Ruang fungsi *piecewise constant* yang dibentuk oleh partisi ruang fitur menjadi hiper-persegi panjang (*hyperrectangles*) melalui pemisahan ortogonal sumbu fitur: $\mathcal{H}_{RF} = \left\{ \frac{1}{B} \sum_{b=1}^B T_b(\mathbf{x}) \right\}$.
-  - *Inductive Bias:* Mengasumsikan ruang data dapat dipisahkan secara efektif melalui serangkaian aturan ambang batas (*threshold rules*) biner tegak lurus sumbu fitur, serta asumsi bahwa penggabungan pohon-pohon yang *decorrelated* akan menekan komponen variansi dari kesalahan generalisasi.
-  - *Perbandingan dengan Baseline:* Mampu memetakan pola ambang kritis non-linear (misal: jam bermain tinggi HANYA berbahaya jika skor kepuasan hidup rendah), pola yang mustahil dipelajari oleh Logistic Regression tanpa interaksi manual.
-* **Strategi Optimasi & Kontrol Overfitting:**  
-  - Hyperparameter tuning menggunakan *Grid Search* / *Randomized Search* pada parameter kunci: `n_estimators` (100–300), `max_depth` (8–20), `min_samples_split` (4–10), `min_samples_leaf` (2–6), dan `max_features='sqrt'`.
-  - Mengatur `class_weight='balanced_subsample'` untuk memastikan setiap pohon menerima bobot penyeimbang kelas pada setiap sampel bootstrap.
 
 ---
 
@@ -216,28 +198,6 @@ Untuk menjawab permasalahan di atas, proyek ini mengimplementasikan tiga model p
   1. Menguji temuan empiris mutakhir (seperti dalam studi *Revisiting Deep Learning Models for Tabular Data*, Gorishniy et al., NeurIPS 2021) yang membuktikan bahwa arsitektur berbasis ResNet merupakan salah satu arsitektur *deep learning* terbaik untuk data tabular yang mampu menyaingi model ensemble pohon.
   2. Menghilangkan kendala *vanishing gradient* dan degradasi performa pada jaringan neural yang dalam, sehingga memungkinkan eksplorasi representasi fitur laten yang lebih kaya.
   3. Menguji efektivitas representasi *deep learning* terdiferensiasi (*gradient-based differentiable learning*) dalam memetakan interaksi psikologis gamer dibandingkan pendekatan berbasis pohon (*tree-based partition*).
-* **Arsitektur Model, Hypothesis Space & Inductive Bias:**  
-  - *Model Family:* Deep Residual Neural Network.
-  - *Inductive Bias:* Mengasumsikan bahwa fungsi target mendekati fungsi identitas pada beberapa tingkatan representasi dan bahwa memodifikasi representasi secara aditif ($\mathbf{x} + \mathcal{F}(\mathbf{x})$) jauh lebih stabil dan mudah dioptimalkan melalui *gradient descent* daripada memetakan transformasi penuh dari nol. Koneksi identitas memungkinkan gradien mengalir secara langsung tanpa hambatan (*gradient highway*) ke lapisan awal.
-  - *Hypothesis Space:* Himpunan fungsi non-linear kontinu bertingkat berdimensi tinggi yang dibentuk oleh komposisi matriks transformasi afinitas dengan aktivasi non-linear dan akumulasi residual aditif: $\mathcal{H}_{ResNet} = \{ f(\mathbf{x}; \Theta) \mid \mathbf{x}_{l+1} = \sigma(\mathbf{x}_l + \mathbf{W}_{l,2} \cdot \text{Dropout}(\sigma(\mathbf{W}_{l,1} \mathbf{x}_l + \mathbf{b}_{l,1})) + \mathbf{b}_{l,2}) \}$.
-* **Desain Rinci Arsitektur (Layer Breakdown):**
-  1. **Input Projection & Embedding Layer**: 
-     - Fitur numerik diskalakan dan diproyeksikan melalui lapisan Dense linear ke dimensi tersembunyi ($d_{\text{model}} = 128$).
-     - Fitur kategorikal berdensitas tinggi diproses menggunakan *Entity Embedding* berdimensi rendah ($8–16$).
-  2. **Residual Block 1**:
-     - Dense Layer ($128 \to 128$) $\to$ Batch Normalization $\to$ ReLU Activation $\to$ Dropout ($p=0.3$) $\to$ Dense Layer ($128 \to 128$) $\to$ Batch Normalization.
-     - Penambahan *Skip Connection*: $\mathbf{x}_{\text{out1}} = \text{ReLU}(\mathbf{x}_{\text{in1}} + \mathcal{F}_1(\mathbf{x}_{\text{in1}}))$.
-  3. **Residual Block 2**:
-     - Dense Layer ($128 \to 128$) $\to$ Batch Normalization $\to$ ReLU Activation $\to$ Dropout ($p=0.3$) $\to$ Dense Layer ($128 \to 128$) $\to$ Batch Normalization.
-     - Penambahan *Skip Connection*: $\mathbf{x}_{\text{out2}} = \text{ReLU}(\mathbf{x}_{\text{out1}} + \mathcal{F}_2(\mathbf{x}_{\text{out1}}))$.
-  4. **Classification Head**:
-     - Dense Layer ($128 \to 64$) $\to$ ReLU $\to$ Dropout ($p=0.2$) $\to$ Dense Layer ($64 \to 1$) $\to$ Sigmoid Activation untuk estimasi probabilitas risiko $P(y=1|\mathbf{x})$.
-* **Strategi Optimasi Deep Learning:**  
-  - *Optimizer:* AdamW (learning rate awal $\eta = 10^{-3}$, weight decay $= 10^{-4}$).
-  - *Loss Function:* *Weighted Binary Cross-Entropy* dengan rasio pembobotan $w_1 = \frac{N_{\text{total}}}{2 \times N_{\text{pos}}}$.
-  - *Learning Rate Schedule:* `ReduceLROnPlateau` (faktor $0.5$, kesabaran $3$ epoch).
-  - *Epochs & Batch Size:* Training minimal $25$ epoch dengan batch size $64$.
-  - *Callbacks:* `EarlyStopping` (patience = 6 epoch pada validation loss) dan `ModelCheckpoint` untuk menyimpan bobot terbaik.
 
 ---
 
@@ -413,6 +373,175 @@ Per langkah, keputusan persiapan data dapat dirangkum dengan kerangka **apa–me
 Dengan demikian, keluaran Bab 5 adalah dua matriks fitur siap latih yang bersih, konsisten, dan bebas *data leakage*, beserta target serta bobot kelas yang siap dipakai pada Bab 6.
 
 ---
+
+## 6. MODELING  **[M + O]**
+
+> Bagian ini menjelaskan perancangan dan optimasi model machine learning mengikuti siklus **Model Design [M]** (sub-bagian .1–.3) dan **Optimization [O]** (sub-bagian .4–.6). Seluruh eksperimen pada bab ini dievaluasi secara ketat pada **validation set** ($2.596$ sampel), sementara data uji *hold-out* ($2.597$ sampel) tetap dikunci dan tidak disentuh hingga evaluasi akhir di Bab 7.
+
+---
+
+### 6.1 Model 1 — Baseline Model
+
+#### 6.1.1 Deskripsi Model  **[M]**
+
+**Nama Model:** Logistic Regression (`class_weight='balanced'`)  
+**Teori Singkat:**  
+Logistic Regression adalah algoritma pembelajaran statistik terawasi (*supervised*) parametrik yang memodelkan probabilitas kemunculan kelas target biner menggunakan fungsi logistik (sigmoid). Model menghitung kombinasi linear terbobot dari vektor fitur masukan $\mathbf{x}$ dan memetakannya ke dalam interval probabilitas kontinu $[0, 1]$:
+$$P(y=1|\mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b) = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}$$
+Keputusan klasifikasi default menggunakan ambang batas probabilitas $0,50$, di mana sampel diprediksi berisiko tinggi ($y=1$) jika $P(y=1|\mathbf{x}) \ge 0,50$.
+
+**Alasan Pemilihan:**  
+1. **Tolok Ukur Standar (*Baseline Standard*):** Berfungsi sebagai fondasi pembanding linear paling sederhana, efisien secara komputasi, dan transparan untuk menilai apakah model non-linear yang lebih kompleks benar-benar memberikan nilai tambah performa.
+2. **Karakteristik Data:** Target bersifat biner (`risiko_tinggi` skor GAD-7 $\ge 10$) dengan dimensi fitur pasca-encoding yang ringkas ($36$ dimensi), sehingga model linear dapat berkonvergensi secara cepat dan stabil.
+3. **Interpretabilitas Koefisien (*Log-Odds*):** Arah dan besaran bobot koefisien ($\mathbf{w}$) dapat diinterpretasikan secara langsung untuk memverifikasi arah pengaruh masing-masing fitur psikologis dan kebiasaan bermain terhadap risiko kecemasan.
+4. **Probabilitas Terkalibrasi:** Probabilitas kontinu yang dihasilkan dapat langsung dievaluasi menggunakan metrik pemeringkatan *ROC-AUC* dan *PR-AUC*.
+
+#### 6.1.2 Hypothesis Space & Inductive Bias  **[M]**
+
+- **Model family / arsitektur:** Generalized Linear Model (GLM) / Model Klasifikasi Linear Parametrik.
+- **Hypothesis space:** Himpunan seluruh bidang pemisah linear (*decision hyperplanes*) berdimensi-$d$ dalam ruang fitur masukan hasil transformasi:
+  $$\mathcal{H}_{LR} = \left\{ f(\mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b) \;\middle|\; \mathbf{w} \in \mathbb{R}^d, \; b \in \mathbb{R} \right\}$$
+- **Inductive bias / asumsi:**
+  1. *Linearitas Log-Odds:* Mengasumsikan log-odds probabilitas kelas target merupakan fungsi linear aditif dari fitur-fitur masukan: $\ln\left(\frac{P}{1-P}\right) = \mathbf{w}^T \mathbf{x} + b$.
+  2. *Independensi Efek Fitur:* Setiap fitur diasumsikan memberikan kontribusi independen secara aditif terhadap log-odds tanpa adanya interaksi multiplikatif otomatis (kecuali direkayasa manual seperti `SPIN_SWL_Ratio`).
+  3. *Regularisasi L2 (Ridge Penalty):* Mengasumsikan bahwa vektor bobot $\mathbf{w}$ berdistribusi mendekati nol (Gaussian prior), guna menahan koefisien agar tidak bernilai ekstrem akibat multikolinearitas.
+- **Implikasi terhadap dataset Anda:**  
+  Asumsi linearitas aditif sangat cocok sebagai pendekatan awal karena korelasi fitur psikologis utama (`SPIN_T` positif, `SWL_T` negatif) terbukti bersifat monoton. Namun, model ini memiliki keterbatasan teoritis: pola batas kritis non-linear (misalnya pengaruh jam bermain tinggi yang hanya memicu kecemasan jika disertai fobia sosial ekstrem) tidak dapat ditangkap secara otomatis oleh model ini tanpa rekayasa fitur interaksi eksplisit.
+
+#### 6.1.3 Implementasi (Ringkas)  **[M]**
+
+Implementasi dieksekusi di dalam pipeline `scikit-learn` untuk menjamin pra-pemrosesan terisolasi bebas *leakage*:
+```python
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+
+# Pipeline Baseline Model
+baseline_pipeline = Pipeline([
+    ('preprocessor', preprocessor),  # SimpleImputer + RobustScaler + OneHotEncoder
+    ('model', LogisticRegression(
+        solver='lbfgs',
+        max_iter=2000,
+        class_weight='balanced',
+        C=1.0,
+        random_state=42
+    ))
+])
+
+# Pelatihan model murni pada data latih (X_train)
+baseline_pipeline.fit(X_train, y_train)
+
+# Prediksi label dan probabilitas pada validation set
+val_pred_baseline = baseline_pipeline.predict(X_val)
+val_proba_baseline = baseline_pipeline.predict_proba(X_val)[:, 1]
+```
+
+#### 6.1.4 Optimization: Objective, Hyperparameter & Regularisasi  **[O]**
+
+**Objective/loss yang dioptimalkan:**  
+Meminimalkan fungsi rugi *Weighted Binary Cross-Entropy* (Log-Loss) dengan penalti regularisasi $L_2$ (*Ridge regularization*) untuk mengompensasi ketimpangan kelas target:
+$$\mathcal{L}_{LR}(\mathbf{w}, b) = -\frac{1}{N} \sum_{i=1}^N \left[ w_1 y_i \ln(\hat{y}_i) + w_0 (1 - y_i) \ln(1 - \hat{y}_i) \right] + \frac{1}{2C} \|\mathbf{w}\|_2^2$$
+
+**Parameter yang digunakan:**
+```
+- solver: 'lbfgs' (algoritma quasi-Newton yang efisien dan stabil untuk dataset berdimensi menengah)
+- max_iter: 2000 (menjamin konvergensi gradien penuh hingga kriteria toleransi terpenuhi)
+- class_weight: 'balanced' (menetapkan bobot w0 = 0,6052 dan w1 = 2,8765 sesuai frekuensi kelas latih)
+- C: 1.0 (kekuatan regularisasi L2 standar guna mencegah overfitting tanpa memangkas bobot secara agresif)
+- penalty: 'l2' (regularisasi kuadratik bobot fitur)
+- random_state: 42 (menjamin reproduktibilitas hasil)
+```
+
+#### 6.1.5 Hasil Awal pada Validation Set  **[O → P]**
+
+Evaluasi awal model baseline diuji pada **validation set** ($2.596$ sampel, dengan $451$ kasus positif risiko tinggi) yang diisolasi ketat dari data training:
+
+| Metrik Evaluasi | Skor Validation | Interpretasi Klinis / Praktis |
+|---|---:|---|
+| **Accuracy** | $0,7211$ ($72,11\%$) | Ketepatan klasifikasi agregat secara keseluruhan. |
+| **Precision (Kelas Positif)** | $0,3475$ ($34,75\%$) | Dari seluruh responden yang diprediksi berisiko, $34,75\%$ terkonfirmasi positif. |
+| **Recall (Kelas Positif)** | **$0,6896$ ($68,96\%$)** | Berhasil mendeteksi **$311$ dari $451$** gamer yang benar-benar berisiko tinggi. |
+| **F1-Score (Kelas Positif)** | $0,4621$ | Rata-rata harmonik antara presisi dan recall kelas positif. |
+| **Macro-F1** | $0,6369$ | Keseimbangan performa tanpa didominasi oleh kelas mayoritas. |
+| **ROC-AUC** | **$0,7825$** | Kemampuan diskriminasi pemeringkatan probabilitas sangat baik ($>0,75$). |
+| **PR-AUC** | **$0,4889$** | Jauh melampaui garis dasar prevalensi positif alamiah ($17,37\%$). |
+
+**Confusion Matrix pada Validation Set:**
+```
+                Prediksi Negatif (0)    Prediksi Positif (1)
+Aktual Negatif (0)      1.561 (TN)              584 (FP)
+Aktual Positif (1)        140 (FN)              311 (TP)
+```
+
+**Analisis Hasil Awal Baseline:**  
+Penerapan `class_weight='balanced'` pada Logistic Regression menghasilkan trade-off yang selaras dengan tujuan penapisan awal (*screening*): model memprioritaskan sensitivitas dengan menangkap hampir $69\%$ penderita kecemasan sedang–berat (Recall $0,690$). Sebagai konsekuensi, timbul $584$ alarm palsu (*False Positive*). Dalam domain kesehatan mental, kehilangan responden berisiko (*False Negative*) membawa dampak klinis yang jauh lebih fatal dibanding melakukan pemeriksaan skrining konfirmasi lanjutan (*False Positive*). Capaian ROC-AUC sebesar $0,7825$ menetapkan standar *baseline* yang solid dan menantang bagi model advanced.
+
+---
+
+### 6.2 Model 2 — ML / Advanced Model
+
+#### 6.2.1 Deskripsi Model  **[M]**
+
+**Nama Model:** Random Forest Classifier (`class_weight='balanced_subsample'`)  
+**Teori Singkat:**  
+Random Forest (Breiman, 2001) adalah algoritma *ensemble learning* berbasis *bagging* (Bootstrap Aggregating) yang mengombinasikan ratusan pohon keputusan (*decision trees*) yang saling didekorelasikan. Setiap pohon dibangun secara independen menggunakan subset sampel acak dengan pengembalian (*bootstrap sample*). Pada setiap titik pemecahan (*split node*), algoritma hanya mengevaluasi subset acak dari fitur masukan ($\sqrt{d}$ fitur). Prediksi akhir ditentukan melalui agregasi rata-rata probabilitas atau pemungutan suara terbanyak (*majority voting*):
+$$\hat{y} = \operatorname{argmax}_{c \in \{0, 1\}} \left( \frac{1}{B} \sum_{b=1}^B P_b(y=c|\mathbf{x}) \right)$$
+
+**Alasan Pemilihan:**  
+1. **Penanganan Hubungan Non-Linear & Interaksi Otomatis:** Mampu memodelkan hubungan non-linear kompleks serta interaksi multivariat antara durasi bermain, alasan bermain, dan fobia sosial tanpa memerlukan spesifikasi interaksi matematis manual.
+2. **Kekokohan terhadap Outliers & Skala:** Sifat partisi pohon keputusan berbasis peringkat urutan membuatnya kebal secara alami terhadap nilai pencilan jam bermain yang tersisa serta perbedaan skala antarfitur.
+3. **Mereduksi Variansi Pohon Tunggal:** Mekanisme agregasi ensemble secara drastis menekan variansi dan risiko *overfitting* yang umum terjadi pada *single Decision Tree*.
+4. **Interpretabilitas Ensemble:** Menyediakan metrik *Feature Importance* berbasis reduksi *Gini Impurity* untuk membedah variabel determinan kecemasan.
+
+**Keunggulan:**
+- Mampu memodelkan relasi non-linear dan ambang batas diskrit (*threshold rules*) dengan presisi tinggi.
+- Sangat tangguh pada data tabular heterogen yang memadukan fitur kategorikal hasil encoding dan numerik kontinu.
+- Tahan terhadap multikolinearitas antarfitur berkat mekanisme *feature subsampling*.
+
+**Kelemahan:**
+- Struktur pohon bersifat *black-box*, sehingga penjelasan kontribusi individual tidak sesederhana koefisien regresi linear.
+- Memerlukan alokasi memori dan waktu komputasi yang lebih besar saat pelatihan dan inferensi dibanding model linear.
+- Cenderung menghasilkan probabilitas yang terlalu terkonsentrasi di sekitar pusat distribusi, sehingga estimasi probabilitas ekstrem terkadang memerlukan kalibrasi lanjutan.
+
+#### 6.2.2 Hypothesis Space & Inductive Bias  **[M]**
+
+- **Model family / arsitektur:** Non-parametric Decision Tree Ensemble / Bagged Tree Classifier.
+- **Hypothesis space:** Ruang fungsi konstan sepotong-sepotong (*piecewise-constant functions*) yang dibentuk oleh partisi ruang fitur masukan menjadi hiper-persegi panjang (*hyperrectangles*) melalui pemisahan ortogonal sumbu:
+  $$\mathcal{H}_{RF} = \left\{ f(\mathbf{x}) = \frac{1}{B} \sum_{b=1}^B T_b(\mathbf{x}; \Theta_b) \right\}$$
+  di mana setiap pohon $T_b$ memetakan ruang fitur ke probabilitas kelas melalui partisi daun (*leaves*).
+- **Inductive bias / asumsi:**
+  1. *Struktur Partisi Ambang Berulang:* Mengasumsikan ruang data dapat dipisahkan secara efektif oleh serangkaian aturan ambang batas biner sejajar sumbu ($x_j \le \theta$).
+  2. *Dekorelasi Menekan Variansi:* Mengasumsikan bahwa kesalahan dari pohon-pohon individual bersifat independen atau berkorelasi rendah, sehingga rata-rata dari ratusan pohon akan mereduksi komponen variansi dari *generalization error* tanpa meningkatkan *bias*.
+  3. *Lokalisasi Sampel:* Responden yang jatuh pada partisi daun yang sama memiliki probabilitas kecemasan yang identik.
+- **Perbandingan dengan baseline:**  
+  Model baseline (Logistic Regression) hanya mampu membentuk satu bidang datar pemisah linear di ruang $36$ dimensi. Sebaliknya, Random Forest dapat membentuk batas keputusan non-linear yang sangat fleksibel (misalnya: gamer dengan `Hours > 40` HANYA diklasifikasikan berisiko tinggi JIKA `SWL_T < 15` dan `SPIN_T > 25`). Pola interaksi bersyarat semacam ini tidak dapat dipelajari oleh model linear tanpa rekayasa fitur polinomial manual.
+
+#### 6.2.3 Implementasi (Ringkas)  **[M]**
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
+
+# Pipeline Advanced Model: Random Forest
+advanced_pipeline = Pipeline([
+    ('preprocessor', preprocessor),
+    ('model', RandomForestClassifier(
+        n_estimators=400,
+        max_features='sqrt',
+        min_samples_leaf=2,
+        class_weight='balanced_subsample',
+        max_depth=None,
+        random_state=42,
+        n_jobs=-1
+    ))
+])
+
+# Pelatihan model pada data latih murni
+advanced_pipeline.fit(X_train, y_train)
+
+# Prediksi label dan probabilitas pada validation set
+val_pred_advanced = advanced_pipeline.predict(X_val)
+val_proba_advanced = advanced_pipeline.predict_proba(X_val)[:, 1]
+```
 
 ## DAFTAR PUSTAKA
 
